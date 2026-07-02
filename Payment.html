@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f172a">
+<title>پرداخت به حساب محمد گرجی دوز</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+font-family:Tahoma,sans-serif;
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#08111f;
+color:#fff;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:-30%;
+background:
+radial-gradient(circle,#00d4ff55 0%,transparent 35%),
+radial-gradient(circle,#7c3aed55 0%,transparent 35%),
+radial-gradient(circle,#22c55e44 0%,transparent 30%);
+animation:bgMove 18s linear infinite alternate;
+filter:blur(40px);
+}
+
+@keyframes bgMove{
+0%{transform:translate(-8%,-8%) rotate(0)}
+100%{transform:translate(8%,8%) rotate(25deg)}
+}
+
+.card{
+position:relative;
+z-index:5;
+width:min(95%,500px);
+padding:35px;
+border-radius:28px;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.15);
+box-shadow:0 20px 60px rgba(0,0,0,.45);
+animation:show .8s ease;
+}
+
+@keyframes show{
+from{opacity:0;transform:translateY(20px)}
+to{opacity:1;transform:none}
+}
+
+h1{
+font-size:28px;
+text-align:center;
+margin-bottom:10px;
+}
+
+.owner{
+text-align:center;
+font-size:22px;
+font-weight:bold;
+margin-bottom:30px;
+color:#8be9ff;
+}
+
+.label{
+opacity:.75;
+margin-bottom:6px;
+}
+
+.value{
+font-size:26px;
+font-weight:bold;
+letter-spacing:2px;
+background:rgba(255,255,255,.08);
+padding:14px;
+border-radius:14px;
+text-align:center;
+margin-bottom:20px;
+word-break:break-all;
+}
+
+button{
+width:100%;
+padding:16px;
+margin-top:12px;
+border:none;
+border-radius:15px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+background:linear-gradient(135deg,#00b4ff,#6d5dfc);
+color:white;
+transition:.25s;
+}
+
+button:hover{
+transform:translateY(-2px);
+}
+
+.toast{
+position:fixed;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+background:#16a34a;
+padding:14px 22px;
+border-radius:12px;
+font-weight:bold;
+opacity:0;
+pointer-events:none;
+transition:.35s;
+}
+
+.toast.show{
+opacity:1;
+bottom:45px;
+}
+
+@media(max-width:500px){
+
+.card{
+padding:22px;
+}
+
+.value{
+font-size:21px;
+}
+
+button{
+font-size:17px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>پرداخت به حساب</h1>
+
+<div class="owner">
+محمد گرجی دوز
+</div>
+
+<div class="label">شماره کارت</div>
+
+<div class="value" id="card">
+6219861461241464
+</div>
+
+<div class="label">شماره شبا</div>
+
+<div class="value" id="sheba">
+IR880560611828007460314202
+</div>
+
+<button onclick="copyCard()">
+📋 کپی شماره کارت
+</button>
+
+<button onclick="copySheba()">
+📋 کپی شماره شبا
+</button>
+
+<button onclick="shareInfo()">
+📤 اشتراک‌گذاری اطلاعات پرداخت
+</button>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+const card="6219861461241464";
+const sheba="IR880560611828007460314202";
+
+async function copy(text,msg){
+
+try{
+await navigator.clipboard.writeText(text);
+toast(msg);
+}catch{
+
+const t=document.createElement("textarea");
+t.value=text;
+document.body.appendChild(t);
+t.select();
+document.execCommand("copy");
+t.remove();
+toast(msg);
+
+}
+
+}
+
+function toast(txt){
+
+const t=document.getElementById("toast");
+
+t.innerHTML=txt;
+
+t.classList.add("show");
+
+setTimeout(()=>{
+
+t.classList.remove("show");
+
+},2200);
+
+}
+
+function copyCard(){
+
+copy(card,"✅ شماره کارت با موفقیت کپی شد");
+
+}
+
+function copySheba(){
+
+copy(sheba,"✅ شماره شبا با موفقیت کپی شد");
+
+}
+
+async function shareInfo(){
+
+const text=
+`پرداخت به حساب محمد گرجی دوز
+
+شماره کارت:
+${card}
+
+شماره شبا:
+${sheba}`;
+
+if(navigator.share){
+
+try{
+await navigator.share({
+title:"اطلاعات پرداخت",
+text:text
+});
+}catch{}
+
+}else{
+
+copy(text,"✅ اطلاعات پرداخت کپی شد");
+
+}
+
+}
+
+window.addEventListener("load",()=>{
+
+if(navigator.clipboard){
+
+navigator.clipboard.writeText(card).then(()=>{
+toast("✅ شماره کارت به صورت خودکار کپی شد");
+}).catch(()=>{});
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
